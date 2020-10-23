@@ -4,6 +4,7 @@ const FILES_TO_CACHE = [
     "/", 
     "/index.html", 
     "/index.js", 
+    "/db.js",
     "/manifest.webmanifest",
     "/styles.css",  
     "/icons/icon-192x192.png", 
@@ -43,8 +44,7 @@ self.addEventListener("activate", function(evt){
 });
 
 self.addEventListener("fetch", function(evt){
-    const {url} = evt.request;
-    if (url.includes("/api/")){
+    if (evt.request.url.includes("/api/")){
         evt.respondWith(
             caches.open(DATA_CACHE_NAME).then(cache =>{
                 return fetch(evt.request)
@@ -58,7 +58,7 @@ self.addEventListener("fetch", function(evt){
                     ).catch( err=> {
                         return cache.match(evt.request);
                     });
-            }).catch(err=>{console.log(err)})
+            }).catch(err=>{console.log("Error is here 1:", err)})
         );
         return;
     }
